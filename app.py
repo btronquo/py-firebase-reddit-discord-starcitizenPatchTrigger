@@ -1,3 +1,4 @@
+import os
 import config
 import praw
 from dhooks import Webhook, Embed
@@ -5,8 +6,10 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+current_path = config.current_path
+
 # Service account (config here: https://console.developers.google.com/projectselector2/iam-admin/serviceaccounts?pli=1&supportedpurview=project&project&folder&organizationId)
-serviceAccountConfig = credentials.Certificate(config.data['script_path'] + 'serviceAccountConfig.json')
+serviceAccountConfig = credentials.Certificate(current_path + '/serviceAccountConfig.json')
 firebase_admin.initialize_app(serviceAccountConfig)
 db = firestore.client()
 
@@ -39,9 +42,6 @@ for submission in reddit.subreddit('starcitizen').search('title:patch note', sor
                 u'created': u''+ postCreated  +'',
                 u'title': u''+  postTitle  +''
             })
-        else:
-            print('The document: ' + postCreated + ' for the post ' + postId + ' exist in the database')
-
             # Send message to Discord server
             embed = Embed(
                 color=14177041,
@@ -53,5 +53,5 @@ for submission in reddit.subreddit('starcitizen').search('title:patch note', sor
             embed.set_image(imgBig)
             hook.send(embed=embed)
             hook.send("@everyone")
-
-print('fin')
+        else:
+            print('The document: ' + postCreated + ' for the post ' + postId + ' exist in the database')
