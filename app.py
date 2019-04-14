@@ -29,8 +29,6 @@ imgIcon = 'https://i.imgur.com/oNg2zU2.png'
 for submission in reddit.subreddit('starcitizen').search('title:patch note', sort='new', time_filter='week'):
         print(submission.created)
         print(submission.title)
-        print(submission.url)
-
         postId = submission.id
         postCreated = str(submission.created)
         postTitle = str(submission.title)
